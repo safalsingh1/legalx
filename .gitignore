@@ -1,0 +1,50 @@
+# Local environment files
+.env
+.env.local
+.env.*.local
+*.env
+
+# Dependencies
+node_modules/
+jspm_packages/
+web_modules/
+venv/
+ENV/
+env/
+.env/
+
+# Python caching
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.toast
+.cache
+.pytest_cache/
+.mypy_cache/
+
+# Project generated assets and database
+backend/audio/*.mp3
+backend/data/chroma_db/
+backend/data/cards.json
+test_pocso.mp3
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+
+# IDE and OS files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db

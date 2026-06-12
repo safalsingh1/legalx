@@ -2,7 +2,7 @@
 
 > **LegalX AI/ML Internship — Round 2 Assessment Submission**
 
-An AI-powered Legal Knowledge Centre that automatically processes Indian legal texts using **Grok (xAI)** and presents them through a beautiful, modern web interface.
+An AI-powered Legal Knowledge Centre that automatically processes Indian legal texts using **Llama 3 (via Groq API)** and presents them through a beautiful, modern web interface.
 
 ---
 
@@ -10,10 +10,10 @@ An AI-powered Legal Knowledge Centre that automatically processes Indian legal t
 
 | Feature | Status | Description |
 |---------|--------|-------------|
-| 🗂️ Knowledge Cards | ✅ | Auto-generated from legal texts via Grok |
+| 🗂️ Knowledge Cards | ✅ | Auto-generated from legal texts via Groq |
 | 📝 AI Summary | ✅ | ≤250 word plain-English summaries |
 | 🔑 Key Info Extraction | ✅ | Rights, provisions, penalties, beneficiaries |
-| 🤖 AI Legal Assistant | ✅ | RAG-powered Q&A with Grok |
+| 🤖 AI Legal Assistant | ✅ | RAG-powered Q&A with Groq |
 | 🔊 Audio Summary | ✅ | gTTS MP3 + download |
 | 🔍 Source Citations | ✅ | RAG chunks with relevance scores |
 | 💾 Chat History | ✅ | Per-session message history |
@@ -38,7 +38,7 @@ An AI-powered Legal Knowledge Centre that automatically processes Indian legal t
 │  │                                                   │   │
 │  │  1. scraper.py  → Fetch legal text               │   │
 │  │        ↓                                         │   │
-│  │  2. processor.py → Grok AI (xAI API)             │   │
+│  │  2. processor.py → Groq API (Llama 3)             │   │
 │  │     • generate_card_description()                │   │
 │  │     • generate_summary() [≤250 words]            │   │
 │  │     • extract_key_info() [structured JSON]       │   │
@@ -53,7 +53,7 @@ An AI-powered Legal Knowledge Centre that automatically processes Indian legal t
 │  │  5. Save to data/cards.json                      │   │
 │  └──────────────────────────────────────────────────┘   │
 │                                                          │
-│  Q&A Flow: Query → ChromaDB retrieval → Grok generation │
+│  Q&A Flow: Query → ChromaDB retrieval → Groq generation │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -63,10 +63,10 @@ An AI-powered Legal Knowledge Centre that automatically processes Indian legal t
 
 | Purpose | Model/Service |
 |---------|--------------|
-| Summarization | `grok-3-mini` via xAI API |
-| Key Info Extraction | `grok-3-mini` via xAI API |
-| Card Description | `grok-3-mini` via xAI API |
-| Q&A (RAG) | `grok-3-mini` via xAI API |
+| Summarization | `llama-3.1-8b-instant` / `llama-3.3-70b-versatile` via Groq API |
+| Key Info Extraction | `llama-3.1-8b-instant` / `llama-3.3-70b-versatile` via Groq API |
+| Card Description | `llama-3.1-8b-instant` / `llama-3.3-70b-versatile` via Groq API |
+| Q&A (RAG) | `llama-3.1-8b-instant` / `llama-3.3-70b-versatile` via Groq API |
 | Embeddings | `all-MiniLM-L6-v2` (sentence-transformers, local) |
 | Audio TTS | Google Text-to-Speech (gTTS) |
 | Vector DB | ChromaDB (persisted) |
@@ -155,11 +155,11 @@ The system is **fully automated** — no manual content writing:
 ```
 Legal Source Text (govt/public domain)
         ↓
-[Grok AI] → Card Description (2-3 sentences)
+[Groq AI] → Card Description (2-3 sentences)
         ↓
-[Grok AI] → Summary (≤250 words, plain English)
+[Groq AI] → Summary (≤250 words, plain English)
         ↓
-[Grok AI] → Key Info (JSON: rights, provisions, penalties, beneficiaries)
+[Groq AI] → Key Info (JSON: rights, provisions, penalties, beneficiaries)
         ↓
 [sentence-transformers] → Text embeddings
         ↓
@@ -174,17 +174,17 @@ Legal Source Text (govt/public domain)
 ```
 User question → ChromaDB similarity search → Top-4 chunks retrieved
         ↓
-[Grok] → Answer grounded in retrieved legal text + source citations
+[Groq] → Answer grounded in retrieved legal text + source citations
 ```
 
 ---
 
 ## 🎯 Challenges Faced
 
-1. **xAI API rate limits** — Used `grok-3-mini` for cost efficiency; sequential processing avoids hammering limits
-2. **Structured JSON from LLM** — Added robust JSON parsing with markdown code block stripping
-3. **Embedding model cold start** — `all-MiniLM-L6-v2` downloads on first run (~90MB), subsequent runs are instant
-4. **Audio generation** — gTTS requires internet; falls back gracefully if offline
+1. **Groq API rate limits** — Used `llama-3.1-8b-instant` for cost efficiency and fast responses; fallback logic automatically switches models if one hits capacity limits.
+2. **Structured JSON from LLM** — Added robust JSON parsing with markdown code block stripping.
+3. **Embedding model cold start** — `all-MiniLM-L6-v2` downloads on first run (~90MB), subsequent runs are instant.
+4. **Audio generation** — gTTS requires internet; falls back gracefully if offline.
 
 ---
 
@@ -193,7 +193,7 @@ User question → ChromaDB similarity search → Top-4 chunks retrieved
 - [ ] Multi-language support (Hindi, Tamil, Bengali)
 - [ ] Semantic search across all topics
 - [ ] User authentication + saved Q&A history
-- [ ] Streaming responses from Grok (SSE)
+- [ ] Streaming responses from Groq (SSE)
 - [ ] Upload custom legal documents for processing
 - [ ] Dockerization + cloud deployment
 - [ ] Speech-to-text input for questions
@@ -238,4 +238,4 @@ legalX/
 
 ---
 
-*Built with ❤️ for LegalX AI/ML Internship Round 2 · Powered by Grok (xAI)*
+*Built with ❤️ for LegalX AI/ML Internship Round 2 · Powered by Groq*
